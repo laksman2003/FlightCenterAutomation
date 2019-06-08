@@ -12,26 +12,24 @@ import org.openqa.selenium.support.ui.WebDriverWait;
  */
 public class BasePage <T extends LoadableComponent<T>> extends LoadableComponent<T>{
 
-private static final int TIMEOUT = 5;
+private static final int TIMEOUT = 30;
 private static final int POLLING = 100;
 protected WebDriver driver;
 protected WebDriverWait wait;
 
-public BasePage(WebDriver driver){	
+protected BasePage(WebDriver driver){	
 	this.driver = driver;	
 	wait = new WebDriverWait(driver, TIMEOUT, POLLING);		
 }
 
 @Override
 protected void isLoaded() throws Error {
-	// TODO Auto-generated method stub
-	
+
 }
 
 @Override
 protected void load() {
-	// TODO Auto-generated method stub
-	
+		
 }
 
 
