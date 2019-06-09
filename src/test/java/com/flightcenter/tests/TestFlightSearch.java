@@ -2,6 +2,7 @@ package com.flightcenter.tests;
 
 import org.testng.annotations.Test;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.List;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -10,6 +11,7 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import com.flighcenter.pages.FlightCenterHomePage;
 import com.flighcenter.pages.SearchResults;
+import com.flighcenter.util.DataUtil;
 import com.google.common.collect.Ordering;
 
 
@@ -29,11 +31,24 @@ public WebDriver driver;
   }
  	
   @Test
-  public void searchFlight() {  
+  public void searchFlight() throws FileNotFoundException {  
 	  
+	  //Get Test Data
+	  String flyfrom = null;
+	  String flyto = null;
+	  flyfrom = DataUtil.readCSVFile("Test001", "From");
+	  flyto = DataUtil.readCSVFile("Test001", "To");
+	  
+	  //Launch App
 	  FlightCenterHomePage homepage = new FlightCenterHomePage(driver).get();
-	  SearchResults resultpage = homepage.searchFlight(false, "Chennai", "Auckland", "", "", "");	
+	  
+	  //Search Flights
+	  SearchResults resultpage = homepage.searchFlight(false, flyfrom, flyto, "", "", "");	
+	  
+	  //Get price list
 	  List<Double>costlist = resultpage.getFlightCost();
+	  
+	  //Validate
 	  boolean issorted = Ordering.natural().isOrdered(costlist);
 	  Assert.assertEquals(issorted, true);
 	  System.out.println("Search Completed");

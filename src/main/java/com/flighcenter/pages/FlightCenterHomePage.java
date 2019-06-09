@@ -1,5 +1,8 @@
 package com.flighcenter.pages;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -11,6 +14,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 
 /**
@@ -21,6 +25,8 @@ import org.openqa.selenium.JavascriptExecutor;
 public class FlightCenterHomePage extends BasePage<FlightCenterHomePage> {
 
 private static final int TIMEOUT = 5;
+private static final String datediv = "div.trip-dates__depart-date-dialog>div>div>div";
+private static final String date_buttons = "div.trip-dates__depart-date-dialog>div>div>div span";
 
 @FindBy(css="input[type='radio'][value='oneway']")
 WebElement onewaytrip;
@@ -48,7 +54,26 @@ WebElement searchbtn;
 
 @FindAll(@FindBy(how = How.CSS, using = "div[role='menu']>div"))
 List<WebElement> alldestinations;
-	
+
+@FindBy(css="input[id*='departDate']")
+WebElement departdate;
+
+@FindBy(css= datediv)
+WebElement datedialog;
+
+@FindAll(@FindBy(how = How.CSS, using = "div.trip-dates__depart-date-dialog>div>div>div>div:nth-of-type(1)>div>div>div:nth-child(1)"))
+List<WebElement> yeardiv;
+
+@FindAll(@FindBy(how = How.CSS, using = "div.trip-dates__depart-date-dialog>div>div>div svg"))
+List<WebElement> movemonth;
+
+@FindAll(@FindBy(how = How.CSS, using = "div.trip-dates__depart-date-dialog>div>div>div span"))
+List<WebElement> buttons_datedialog;
+
+@FindBy(css="input[id*='arriveDate']")
+WebElement arrivedate;
+
+
 public FlightCenterHomePage(WebDriver driver)
 {
 	super(driver);	
@@ -106,7 +131,67 @@ private void enterFlyFromTo(String flyfrom, String flyto)
    
    this.flyingto.click();
    this.flyingto.sendKeys(flyto);
-   this.alldestinations.get(0).click();   
+   this.alldestinations.get(0).click();
+ 
+	new Actions(this.driver).click(this.departdate).build().perform();
+	wait.until(ExpectedConditions.visibilityOf(this.datedialog));
+	this.enterDate("15", "", "2019");
+	this.enterDate("30", "", "2020");
+}
+
+private void enterDate(SimpleDateFormat date)
+{
+	
+	
+}
+
+/**
+ * This method is used to enter Departing
+ * and Return Date.
+ * @param date
+ */
+private void enterDate(String date, String month, String year)
+{  
+	
+	
+	//Choose Year
+	this.yeardiv.get(0).click();
+    for(WebElement button : this.buttons_datedialog) {
+    	
+     if(button.getAttribute("innerHTML").contains(year))
+     {
+    	 button.click();
+    	 wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(By.cssSelector(date_buttons), 20));
+         break; 
+     } 	
+    	
+    }
+	
+	//Choose Month
+    
+	
+	
+	//Choose Date    
+    for(WebElement button : this.buttons_datedialog) {
+    	
+     if(button.getAttribute("innerHTML").contains(date))
+     {   
+    	 try {
+    		 new Actions(this.driver).doubleClick(button).build().perform();
+    		 this.wait.until(ExpectedConditions.invisibilityOf(this.datedialog));
+             break; 
+    	 }
+    	 catch(Exception e)
+    	 {
+    		 new Actions(this.driver).doubleClick(button).build().perform();
+    		 this.wait.until(ExpectedConditions.invisibilityOf(this.datedialog));
+             break; 
+    	 }
+    	 
+     } 	
+    	
+    }
+	
 }
 	
 }
