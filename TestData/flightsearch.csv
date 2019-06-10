@@ -1,2 +1,2 @@
-TestCaseId,From,To,StartDate,ReturnDate,Tickettype
-Test001,Chennai,Aucklan,,,,
+TestCaseId,From,To,StartDate,ReturnDate,Adults,Children,Infants,Class
+Test001,Chennai,Auckland,20-February-2020,25-March-2020,4,2,3,Economy

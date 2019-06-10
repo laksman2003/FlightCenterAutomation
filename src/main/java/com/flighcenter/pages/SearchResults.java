@@ -36,20 +36,23 @@ public class SearchResults extends BasePage<SearchResults> {
 	}
     
 	@Override
-	protected void isLoaded() throws Error {        
-	
+	protected void isLoaded() throws Error {  
 		try {
 			
-			//Wait for search tab and switch to search tab 
-			ExpectedCondition<Boolean> newtab = new
-		            ExpectedCondition<Boolean>() {
-		                public Boolean apply(WebDriver driver) {
-		                	Set<String> winhndle = driver.getWindowHandles();
-		                    return winhndle.size()>1?true:false;
-		                }
-		            };
-		    wait.until(newtab);	
-		    this.driver.switchTo().window(((String)driver.getWindowHandles().toArray()[1]));
+			try {
+				
+				//Wait for search tab and switch to search tab 
+				ExpectedCondition<Boolean> newtab = new
+			            ExpectedCondition<Boolean>() {
+			                public Boolean apply(WebDriver driver) {
+			                	Set<String> winhndle = driver.getWindowHandles();
+			                    return winhndle.size()>1?true:false;
+			                }
+			            };
+			    wait.until(newtab);	
+			    this.driver.switchTo().window(((String)driver.getWindowHandles().toArray()[1]));
+			}
+			catch(Exception e) {}			
 		    
 			//wait for page load
 		    ExpectedCondition<Boolean> pageLoadCondition = new
